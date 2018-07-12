@@ -83,15 +83,23 @@ public class RPNCalculator implements Calculator {
             historyNumbers.push(number);
             break;
           case UNDO:
+            int undoCount = 0;
             getNumberFromStack(numbers, number, pos);
             String previousOp = historyNumbers.pop();
-            if (!(Operator.fromString(previousOp) == Operator.UNDO)) {
+            while (Operator.fromString(previousOp) == Operator.UNDO) {
+              undoCount++;
+              previousOp = historyNumbers.pop();
+            }
+            if (!(Operator.fromString(previousOp) == Operator.UNDO) && !isNumber(previousOp)) {
               numberStack.push(previousOp);
             }
-            int undoCount = operatorIntegerMap.get(previousOp);
-            for (int i = 0; i < undoCount; i++) {
-              String undoNumber = historyNumbers.pop();
-              numberStack.push(undoNumber);
+            if (isNumber(previousOp)) {
+            } else {
+              int opCount = operatorIntegerMap.get(previousOp);
+              for (int i = 0; i < opCount; i++) {
+                String undoNumber = historyNumbers.pop();
+                numbers.push(Double.valueOf(undoNumber));
+              }
             }
             break;
           default:

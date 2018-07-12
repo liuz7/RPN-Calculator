@@ -47,13 +47,23 @@ public class RPNCalculatorTest {
   }
 
   @Test
+  public void calShouldBeAbleToHandleOtherClearOperation() {
+    assertThat(this.rpnCalculator.calculate("5 2 - 3 - clear"), is(equalTo("")));
+  }
+
+  @Test
   public void calShouldBeAbleToHandleMultiMULTIPLY() {
     assertThat(this.rpnCalculator.calculate(" 1 2 3 4 5 * * * *"), is(equalTo("120.0")));
   }
 
   @Test
   public void calShouldBeAbleToHandleUndo() {
-    assertThat(this.rpnCalculator.calculate("5 4 3 2 undo undo * 5 * undo"), is(equalTo("100.0")));
+    assertThat(this.rpnCalculator.calculate("5 4 3 2 undo undo * 5 *"), is(equalTo("100.0")));
+  }
+
+  @Test
+  public void calShouldBeAbleToHandleOtherUndo() {
+    assertThat(this.rpnCalculator.calculate("5 4 * undo"), is(equalTo("20.0")));
   }
 
   @Test(expectedExceptions = {
